@@ -3,7 +3,7 @@ from enum import Enum
 from json import dumps
 
 
-class EncryptionStatus(Enum):
+class EncryptionStatus(str, Enum):
     ENCRYPTED = 'encrypted'
     DECRYPTED = 'decrypted'
 
