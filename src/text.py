@@ -1,6 +1,5 @@
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from enum import Enum
-from json import dumps
 
 
 class EncryptionStatus(str, Enum):
@@ -12,8 +11,4 @@ class EncryptionStatus(str, Enum):
 class Text:
     text: str
     rot_type: int
-    status: EncryptionStatus
-
-    @property
-    def json(self):
-        return dumps(self.__dict__)
+    status: str
