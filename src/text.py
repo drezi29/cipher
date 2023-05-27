@@ -3,8 +3,8 @@ from enum import Enum
 
 
 class EncryptionStatus(str, Enum):
-    ENCRYPTED = "encrypted"
-    DECRYPTED = "decrypted"
+    ENCRYPTED = 'encrypted'
+    DECRYPTED = 'decrypted'
 
 
 @dataclass
