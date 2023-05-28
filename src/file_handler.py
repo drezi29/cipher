@@ -1,10 +1,9 @@
 import os
-from custom_exceptions import ReadFileError, CreateFileError,\
-    AppendingTextToFileError
+from custom_exceptions import ReadFileError, CreateFileError, AppendingTextToFileError
 
 
 class FileHandler:
-    FOLDER_PATH = "../files/"
+    FOLDER_PATH = '../files/'
 
     @staticmethod
     def read_file(file_name: str) -> str:
@@ -12,7 +11,7 @@ class FileHandler:
 
         full_path = FileHandler.FOLDER_PATH + file_name
         try:
-            with open(full_path, "r") as file:
+            with open(full_path, 'r') as file:
                 file_content = file.read()
                 return file_content
         except IOError:
@@ -35,7 +34,7 @@ class FileHandler:
         """Takes file name and content data, writes data to new file"""
 
         try:
-            with open(full_path, "w") as file:
+            with open(full_path, 'w') as file:
                 file.write(content)
         except IOError:
             raise CreateFileError
@@ -46,7 +45,7 @@ class FileHandler:
         with given name"""
 
         try:
-            with open(full_path, "a") as file:
-                file.write("\n" + content)
+            with open(full_path, 'a') as file:
+                file.write('\n' + content)
         except IOError:
             raise AppendingTextToFileError
