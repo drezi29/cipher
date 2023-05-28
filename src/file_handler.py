@@ -1,19 +1,35 @@
 import os
-from custom_exceptions import ReadFileError, CreateFileError, AppendingTextToFileError
+from json import loads
+from typing import List
+from custom_exceptions import (
+    AppendingTextToFileError,
+    CreateFileError,
+    InvalidRotStatus,
+    InvalidTextStatus,
+    ReadFileError,
+)
+from text import EncryptionStatus, Text
 
 
 class FileHandler:
     FOLDER_PATH = '../files/'
 
     @staticmethod
-    def read_file(file_name: str) -> str:
-        """Takes file name, read data from file and return its content"""
+    def read_file(file_name: str) -> List[Text]:
+        """Takes file name, read data from file and return its content as Text object list"""
 
         full_path = FileHandler.FOLDER_PATH + file_name
         try:
             with open(full_path, 'r') as file:
-                file_content = file.read()
-                return file_content
+                file_content: str = file.read()
+                data = loads(file_content)
+
+                messages_as_text_objects: List[Text] = []
+                for item in data:
+                    text = Text(**item)
+                    FileHandler.__validate_record(text)
+                    messages_as_text_objects.append(text)
+                return messages_as_text_objects
         except IOError:
             raise ReadFileError
 
@@ -32,7 +48,6 @@ class FileHandler:
     @staticmethod
     def _create_file(full_path: str, content: str):
         """Takes file name and content data, writes data to new file"""
-
         try:
             with open(full_path, 'w') as file:
                 file.write(content)
@@ -49,3 +64,13 @@ class FileHandler:
                 file.write('\n' + content)
         except IOError:
             raise AppendingTextToFileError
+
+    @staticmethod
+    def __validate_record(record: Text) -> None:
+        if (
+            record.status != EncryptionStatus.ENCRYPTED.value
+            and record.status != EncryptionStatus.DECRYPTED.value
+        ):
+            raise InvalidTextStatus
+        if record.rot_type < 1 or record.rot_type > 126:
+            raise InvalidRotStatus

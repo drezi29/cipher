@@ -1,4 +1,5 @@
-from typing import List, Dict
+from json import dumps
+from typing import List
 from text import Text
 from dataclasses import asdict
 
@@ -19,5 +20,8 @@ class MemoryBuffer:
     def buffer_pop(self) -> Text:
         return self.__buffer.pop()
 
-    def buffer_to_json(self) -> List[Dict]:
-        return [asdict(record) for record in self.__buffer]
+    def buffer_to_json(self) -> str:
+        return dumps([asdict(record) for record in self.__buffer])
+
+    def size(self) -> int:
+        return len(self.__buffer)
