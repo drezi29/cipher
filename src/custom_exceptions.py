@@ -45,3 +45,10 @@ class InvalidChoice(Exception):
 
     def __str__(self):
         return 'Invalid choice'
+
+
+class InvalidRotStatus(Exception):
+    """Raised when rot of record from file is not in between 1 and 126"""
+
+    def __str__(self):
+        return 'Invalid rot value. Rot should be value between 1 and 126'
