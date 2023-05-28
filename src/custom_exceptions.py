@@ -31,3 +31,17 @@ class EncryptionOfEncryptedMessageError(Exception):
 
     def __str__(self):
         return 'Attempting to encrypt an encrypted message'
+
+
+class InvalidTextStatus(Exception):
+    """Raised when status of record from file is other than encrypted or decrypted"""
+
+    def __str__(self):
+        return 'Invalid status. Status should be "encrypted" or "decrypted"'
+
+
+class InvalidChoice(Exception):
+    """Raised when user type invalid value"""
+
+    def __str__(self):
+        return 'Invalid choice'
