@@ -32,8 +32,8 @@ class Cipher:
 
     @staticmethod
     def do_shift_in_text(text: str, rot_type: int, signs: str) -> str:
-        message = ''
-        amount_of_signs = len(signs)
+        message: str = ''
+        amount_of_signs: int = len(signs)
         for char in text:
             if char.isupper():
                 position: int = signs.find(char)

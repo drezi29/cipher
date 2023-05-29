@@ -8,7 +8,7 @@ from text import EncryptionStatus, Text
 
 
 class Manager:
-    def __init__(self):
+    def __init__(self) -> None:
         self.__is_not_exit = True
         self.__buffer = MemoryBuffer()
 
@@ -35,7 +35,7 @@ class Manager:
     def __manage_choosing_option(self) -> None:
         """Run function selected by user"""
 
-        option = input('Choose option: ')
+        option: str = input('Choose option: ')
         match option:
             case '1':
                 self.__encrypt_from_file()
@@ -56,7 +56,7 @@ class Manager:
         """Exit program with safe exit if records are in buffer"""
 
         if self.__buffer.size() > 0:
-            decision = input(
+            decision: str = input(
                 'There are records not saved in files that will be lost on exit. '
                 'Do you want to save result before exit? [Y/N]: '
             )
@@ -71,7 +71,7 @@ class Manager:
 
         text: str = input('Type the message to be encrypted: ')
         rot: int = Manager.__rot_information()
-        text_obj = Text(text, rot, EncryptionStatus.DECRYPTED.value)
+        text_obj: Text = Text(text, rot, EncryptionStatus.DECRYPTED.value)
         self.__buffer.add_to_buffer(
             Cipher.encrypt(text_obj, Manager.__choose_alphabet(rot))
         )
@@ -95,7 +95,7 @@ class Manager:
 
         text: str = input('Type the message to be decrypted: ')
         rot: int = Manager.__rot_information()
-        text_obj = Text(text, rot, EncryptionStatus.ENCRYPTED.value)
+        text_obj: Text = Text(text, rot, EncryptionStatus.ENCRYPTED.value)
         self.__buffer.add_to_buffer(
             Cipher.decrypt(text_obj, Manager.__choose_alphabet(rot))
         )
@@ -117,7 +117,9 @@ class Manager:
     def __save_as_file(self) -> None:
         """Saves all records from memory buffer to file"""
 
-        file_name = input('Type the name of the file to which to save the content: ')
+        file_name: str = input(
+            'Type the name of the file to which to save the content: '
+        )
         FileHandler.write_to_file(file_name, self.__buffer.buffer_to_json())
         self.__ask_for_cleaning_buffer()
 
@@ -129,8 +131,8 @@ class Manager:
         print(
             'For rot types between 26 and 126 algorithm uses ASCII table known from ROT47 algorithm.'
         )
-        invalid_rot = True
-        rot = 1
+        invalid_rot: bool = True
+        rot: int = 1
         while invalid_rot:
             try:
                 rot = int(input('Type rot type (1-126): '))
@@ -151,7 +153,7 @@ class Manager:
         if rot < 26:
             return string.ascii_uppercase
         else:
-            ascii_rot47 = ''
+            ascii_rot47: str = ''
             for i in range(33, 127, 1):
                 ascii_rot47 += chr(i)
             return ascii_rot47
@@ -159,14 +161,14 @@ class Manager:
     def __ask_to_save(self):
         """Ask user for save result in file and saving if user confirm"""
 
-        decision = input('Do you want save result to file? [Y/N]: ')
+        decision: str = input('Do you want save result to file? [Y/N]: ')
         if self.__is_confirmed(decision):
             self.__save_as_file()
 
     def __ask_for_cleaning_buffer(self):
         """Ask user for cleaning buffer and clean if user confirm"""
 
-        decision = input('Do you want to clear buffer? [Y/N]: ')
+        decision: str = input('Do you want to clear buffer? [Y/N]: ')
         if self.__is_confirmed(decision):
             self.__buffer.clear_buffer()
 
