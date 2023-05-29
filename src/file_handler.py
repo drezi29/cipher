@@ -1,6 +1,6 @@
 import os
 from json import loads
-from typing import List
+from typing import Any, List
 from custom_exceptions import (
     AppendingTextToFileError,
     CreateFileError,
@@ -18,15 +18,15 @@ class FileHandler:
     def read_file(file_name: str) -> List[Text]:
         """Takes file name, read data from file and return its content as Text object list"""
 
-        full_path = FileHandler.FOLDER_PATH + file_name
+        full_path: str = FileHandler.FOLDER_PATH + file_name
         try:
             with open(full_path, 'r') as file:
                 file_content: str = file.read()
-                data = loads(file_content)
+                data: Any = loads(file_content)
 
                 messages_as_text_objects: List[Text] = []
                 for item in data:
-                    text = Text(**item)
+                    text: Text = Text(**item)
                     FileHandler.__validate_record(text)
                     messages_as_text_objects.append(text)
                 return messages_as_text_objects
@@ -39,7 +39,7 @@ class FileHandler:
         decides if file needs to be created or data needs to be appended
         to the existing one"""
 
-        full_path = FileHandler.FOLDER_PATH + file_name
+        full_path: str = FileHandler.FOLDER_PATH + file_name
         if os.path.isfile(full_path):
             FileHandler._append_file(full_path, content)
         else:
@@ -48,6 +48,7 @@ class FileHandler:
     @staticmethod
     def _create_file(full_path: str, content: str):
         """Takes file name and content data, writes data to new file"""
+
         try:
             with open(full_path, 'w') as file:
                 file.write(content)
