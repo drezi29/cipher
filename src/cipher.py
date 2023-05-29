@@ -8,6 +8,8 @@ from custom_exceptions import (
 class Cipher:
     @staticmethod
     def encrypt(text_obj: Text, alphabet: str) -> Text:
+        """Static method that encrypt passed text"""
+
         if text_obj.status == EncryptionStatus.ENCRYPTED:
             raise EncryptionOfEncryptedMessageError
         else:
@@ -20,6 +22,8 @@ class Cipher:
 
     @staticmethod
     def decrypt(text_obj: Text, alphabet: str) -> Text:
+        """Static method that decrypt passed text"""
+
         if text_obj.status == EncryptionStatus.DECRYPTED:
             raise DecryptionOfDecryptedMessageError
         else:
@@ -32,19 +36,30 @@ class Cipher:
 
     @staticmethod
     def do_shift_in_text(text: str, rot_type: int, signs: str) -> str:
+        """Method for shifting chars"""
+
         message: str = ''
         amount_of_signs: int = len(signs)
-        for char in text:
-            if char.isupper():
-                position: int = signs.find(char)
-                message += signs[
-                    (position + rot_type + amount_of_signs) % amount_of_signs
-                ]
-            elif char.islower():
-                position: int = signs.find(char.upper())
-                message += signs[
-                    (position + rot_type + amount_of_signs) % amount_of_signs
-                ].lower()
-            else:
-                message += char
+
+        if abs(rot_type) > 25:
+            for char in text:
+                if char not in signs:
+                    message += char
+                else:
+                    position: int = signs.find(char)
+                    message += signs[
+                        (position + rot_type + amount_of_signs) % amount_of_signs
+                    ]
+        else:
+            for char in text:
+                if char.upper() not in signs:
+                    message += char
+                else:
+                    position: int = signs.find(char.upper())
+                    shifted_char = signs[
+                        (position + rot_type + amount_of_signs) % amount_of_signs
+                    ]
+                    if char.islower():
+                        shifted_char = shifted_char.lower()
+                    message += shifted_char
         return message
