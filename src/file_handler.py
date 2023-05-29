@@ -67,6 +67,8 @@ class FileHandler:
 
     @staticmethod
     def __validate_record(record: Text) -> None:
+        """Checks if text from file contains correct status and rot type"""
+
         if (
             record.status != EncryptionStatus.ENCRYPTED.value
             and record.status != EncryptionStatus.DECRYPTED.value
