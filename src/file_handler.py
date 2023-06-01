@@ -1,14 +1,14 @@
 import os
 from json import loads
 from typing import Any, List
-from custom_exceptions import (
+from .custom_exceptions import (
     AppendingTextToFileError,
     CreateFileError,
     InvalidRotStatus,
     InvalidTextStatus,
     ReadFileError,
 )
-from text import EncryptionStatus, Text
+from .text import EncryptionStatus, Text
 
 
 class FileHandler:

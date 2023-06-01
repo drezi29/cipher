@@ -1,6 +1,6 @@
 from json import dumps
 from typing import List
-from text import Text
+from .text import Text
 from dataclasses import asdict
 
 
@@ -20,8 +20,7 @@ class MemoryBuffer:
 
     def clear_buffer(self) -> None:
         """Makes buffer empty"""
-
-        self.__buffer = []
+        self.__buffer.clear()
 
     def buffer_pop(self) -> Text:
         """Take the last element of buffer"""

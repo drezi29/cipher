@@ -1,5 +1,5 @@
-from text import EncryptionStatus, Text
-from custom_exceptions import (
+from .text import EncryptionStatus, Text
+from .custom_exceptions import (
     DecryptionOfDecryptedMessageError,
     EncryptionOfEncryptedMessageError,
 )
@@ -13,7 +13,7 @@ class Cipher:
         if text_obj.status == EncryptionStatus.ENCRYPTED:
             raise EncryptionOfEncryptedMessageError
         else:
-            encrypted_message: str = Cipher.do_shift_in_text(
+            encrypted_message: str = Cipher.__do_shift_in_text(
                 text_obj.text, text_obj.rot_type, alphabet
             )
             return Text(
@@ -27,7 +27,7 @@ class Cipher:
         if text_obj.status == EncryptionStatus.DECRYPTED:
             raise DecryptionOfDecryptedMessageError
         else:
-            decrypted_message: str = Cipher.do_shift_in_text(
+            decrypted_message: str = Cipher.__do_shift_in_text(
                 text_obj.text, -text_obj.rot_type, alphabet
             )
             return Text(
@@ -35,7 +35,7 @@ class Cipher:
             )
 
     @staticmethod
-    def do_shift_in_text(text: str, rot_type: int, signs: str) -> str:
+    def __do_shift_in_text(text: str, rot_type: int, signs: str) -> str:
         """Method for shifting chars"""
 
         message: str = ''

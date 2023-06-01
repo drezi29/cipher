@@ -1,10 +1,10 @@
 import string
 from typing import List
-from cipher import Cipher
-from custom_exceptions import InvalidChoice
-from file_handler import FileHandler
-from memory_buffer import MemoryBuffer
-from text import EncryptionStatus, Text
+from .cipher import Cipher
+from .custom_exceptions import InvalidChoice
+from .file_handler import FileHandler
+from .memory_buffer import MemoryBuffer
+from .text import EncryptionStatus, Text
 
 
 class Manager:
