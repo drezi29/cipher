@@ -1,5 +1,4 @@
-from json import dumps
-from typing import List
+from typing import Any, Dict, List
 from .text import Text
 from dataclasses import asdict
 
@@ -27,10 +26,10 @@ class MemoryBuffer:
 
         return self.__buffer.pop()
 
-    def buffer_to_json(self) -> str:
+    def buffer_to_json(self) -> List[Dict[str, Any]]:
         """Converts buffer records to json format"""
 
-        return dumps([asdict(record) for record in self.__buffer])
+        return [asdict(record) for record in self.__buffer]
 
     def size(self) -> int:
         """Returns amount of elements in buffer"""

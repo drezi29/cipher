@@ -1,5 +1,5 @@
 import os
-from json import loads
+from json import dump, dumps, load, loads
 from typing import Any, List
 from .custom_exceptions import (
     AppendingTextToFileError,
@@ -12,24 +12,24 @@ from .text import EncryptionStatus, Text
 
 
 class FileHandler:
-    FOLDER_PATH = '../files/'
+    FOLDER_PATH = 'files/'
+    EXTENSION = '.json'
 
     @staticmethod
     def read_file(file_name: str) -> List[Text]:
         """Takes file name, read data from file and return its content as Text object list"""
 
-        full_path: str = FileHandler.FOLDER_PATH + file_name
+        full_path: str = FileHandler.FOLDER_PATH + file_name + FileHandler.EXTENSION
         try:
             with open(full_path, 'r') as file:
                 file_content: str = file.read()
-                data: Any = loads(file_content)
-
-                messages_as_text_objects: List[Text] = []
-                for item in data:
-                    text: Text = Text(**item)
-                    FileHandler.__validate_record(text)
-                    messages_as_text_objects.append(text)
-                return messages_as_text_objects
+                data: List[Any] = loads(file_content)
+                text_objects: List[Text] = [
+                    Text(**item)
+                    for item in data
+                    if FileHandler.__validate_record(Text(**item))
+                ]
+                return text_objects
         except IOError:
             raise ReadFileError
 
@@ -39,7 +39,7 @@ class FileHandler:
         decides if file needs to be created or data needs to be appended
         to the existing one"""
 
-        full_path: str = FileHandler.FOLDER_PATH + file_name
+        full_path: str = FileHandler.FOLDER_PATH + file_name + FileHandler.EXTENSION
         if os.path.isfile(full_path):
             FileHandler._append_file(full_path, content)
         else:
@@ -51,7 +51,7 @@ class FileHandler:
 
         try:
             with open(full_path, 'w') as file:
-                file.write(content)
+                file.write(dumps(content))
         except IOError:
             raise CreateFileError
 
@@ -61,13 +61,16 @@ class FileHandler:
         with given name"""
 
         try:
-            with open(full_path, 'a') as file:
-                file.write('\n' + content)
+            with open(full_path, 'r+') as file:
+                file_data = load(file)
+                file_data.append(*content)
+                file.seek(0)
+                dump(file_data, file)
         except IOError:
             raise AppendingTextToFileError
 
     @staticmethod
-    def __validate_record(record: Text) -> None:
+    def __validate_record(record: Text) -> bool:
         """Checks if text from file contains correct status and rot type"""
 
         if (
@@ -77,3 +80,4 @@ class FileHandler:
             raise InvalidTextStatus
         if record.rot_type < 1 or record.rot_type > 126:
             raise InvalidRotStatus
+        return True
