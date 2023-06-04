@@ -8,6 +8,9 @@ from .text import EncryptionStatus, Text
 
 
 class Manager:
+    FOLDER_PATH = 'files/'
+    EXTENSION = '.json'
+
     def __init__(self) -> None:
         self.__is_not_exit = True
         self.__buffer = MemoryBuffer()
@@ -83,7 +86,9 @@ class Manager:
         file_name: str = input(
             'Type the name of the file with the content to be encrypted: '
         )
-        messages: List[Text] = FileHandler.read_file(file_name)
+        messages: List[Text] = FileHandler.read_file(
+            self.__prepare_full_path(file_name)
+        )
         for message in messages:
             self.__buffer.add_to_buffer(
                 Cipher.encrypt(message, Manager.__choose_alphabet(message.rot_type))
@@ -107,7 +112,9 @@ class Manager:
         file_name: str = input(
             'Type the name of the file with the content to be decrypted: '
         )
-        messages: List[Text] = FileHandler.read_file(file_name)
+        messages: List[Text] = FileHandler.read_file(
+            self.__prepare_full_path(file_name)
+        )
         for message in messages:
             self.__buffer.add_to_buffer(
                 Cipher.decrypt(message, Manager.__choose_alphabet(message.rot_type))
@@ -120,7 +127,9 @@ class Manager:
         file_name: str = input(
             'Type the name of the file to which to save the content: '
         )
-        FileHandler.write_to_file(file_name, self.__buffer.buffer_to_json())
+        FileHandler.write_to_file(
+            self.__prepare_full_path(file_name), self.__buffer.buffer_to_json()
+        )
         self.__ask_for_cleaning_buffer()
 
     @staticmethod
@@ -182,3 +191,6 @@ class Manager:
             return True
         elif decision.upper() == 'N':
             return False
+
+    def __prepare_full_path(self, file_name: str) -> str:
+        return Manager.FOLDER_PATH + file_name + Manager.EXTENSION

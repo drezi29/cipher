@@ -1,6 +1,6 @@
 import os
 from json import dump, dumps, load, loads
-from typing import Any, List
+from typing import Any, Dict, List
 from .custom_exceptions import (
     AppendingTextToFileError,
     CreateFileError,
@@ -12,14 +12,11 @@ from .text import EncryptionStatus, Text
 
 
 class FileHandler:
-    FOLDER_PATH = 'files/'
-    EXTENSION = '.json'
-
     @staticmethod
-    def read_file(file_name: str) -> List[Text]:
+    def read_file(full_path: str) -> List[Text]:
         """Takes file name, read data from file and return its content as Text object list"""
 
-        full_path: str = FileHandler.FOLDER_PATH + file_name + FileHandler.EXTENSION
+        #
         try:
             with open(full_path, 'r') as file:
                 file_content: str = file.read()
@@ -34,19 +31,19 @@ class FileHandler:
             raise ReadFileError
 
     @staticmethod
-    def write_to_file(file_name: str, content: str):
+    def write_to_file(full_path: str, content: List[Dict[str, Any]]):
         """Takes file name and content data that needs to be written to file,
         decides if file needs to be created or data needs to be appended
         to the existing one"""
 
-        full_path: str = FileHandler.FOLDER_PATH + file_name + FileHandler.EXTENSION
+        # full_path: str = FileHandler.FOLDER_PATH + file_name + FileHandler.EXTENSION
         if os.path.isfile(full_path):
             FileHandler._append_file(full_path, content)
         else:
             FileHandler._create_file(full_path, content)
 
     @staticmethod
-    def _create_file(full_path: str, content: str):
+    def _create_file(full_path: str, content: List[Dict[str, Any]]):
         """Takes file name and content data, writes data to new file"""
 
         try:
